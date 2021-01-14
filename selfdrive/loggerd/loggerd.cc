@@ -329,8 +329,8 @@ void encoder_thread(int cam_idx) {
 }
 
 void append_property(const char* key, const char* value, void *cookie) {
-  std::vector<std::pair<std::string, std::string> > *properties =
-    (std::vector<std::pair<std::string, std::string> > *)cookie;
+  std::vector<std::pair<std::string, std::string>> *properties =
+    (std::vector<std::pair<std::string, std::string>> *)cookie;
 
   properties->push_back(std::make_pair(std::string(key), std::string(value)));
 }
