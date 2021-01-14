@@ -4,8 +4,6 @@ def phone(String ip, String step_label, String cmd) {
        script: """
 ssh -tt -o StrictHostKeyChecking=no -i ${key_file} -p 8022 comma@${ip} <<'EOF'
 
-set -e
-
 export CI=1
 export TEST_DIR=${env.TEST_DIR}
 export GIT_BRANCH=${env.GIT_BRANCH}
@@ -18,9 +16,11 @@ if [ -f /EON ]; then
   chmod 777 /dev/shm
 fi
 
-cd ${env.TEST_DIR} || true
-${cmd}
-exit 0
+#cd ${env.TEST_DIR} || true
+#${cmd}
+#exit 0
+
+cd abcdefg
 
 EOF"""
   }
