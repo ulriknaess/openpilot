@@ -4,7 +4,12 @@ def phone(String ip, String step_label, String cmd) {
   withCredentials([file(credentialsId: 'id_rsa_public', variable: 'key_file')]) {
     sh label: step_label,
        script: """
-               ssh -vvv -tt -o StrictHostKeyChecking=no -i ${key_file} -p 8022 comma@${ip} ${ci_env} <<'EOF'
+               ssh -tt -o StrictHostKeyChecking=no -i ${key_file} -p 8022 comma@${ip} <<'EOF'
+
+export CI=1
+export TEST_DIR=${env.TEST_DIR}
+export GIT_BRANCH=${env.GIT_BRANCH}
+export GIT_COMMIT=${env.GIT_COMMIT}
 
 if [ -f /EON ]; then
   echo \$\$ > /dev/cpuset/app/tasks || true
