@@ -16,11 +16,11 @@ if [ -f /EON ]; then
   chmod 777 /dev/shm
 fi
 
-#cd ${env.TEST_DIR} || true
-#${cmd}
-#exit 0
-
-cd abcdefg
+echo \$-
+set -e
+cd ${env.TEST_DIR} || true
+${cmd}
+exit 0
 
 EOF"""
   }
