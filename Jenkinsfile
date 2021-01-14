@@ -17,7 +17,14 @@ if [ -f /EON ]; then
 fi
 
 echo \$-
+whoami
+echo printenv
 set -e
+echo \$-
+whoami
+echo printenv
+
+
 cd ${env.TEST_DIR} || true
 ${cmd}
 exit 0
