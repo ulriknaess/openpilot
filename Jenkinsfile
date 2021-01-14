@@ -1,10 +1,8 @@
 def phone(String ip, String step_label, String cmd) {
-  def ci_env = "CI=1 TEST_DIR=${env.TEST_DIR} GIT_BRANCH=${env.GIT_BRANCH} GIT_COMMIT=${env.GIT_COMMIT}"
-
   withCredentials([file(credentialsId: 'id_rsa_public', variable: 'key_file')]) {
     sh label: step_label,
        script: """
-               ssh -tt -o StrictHostKeyChecking=no -i ${key_file} -p 8022 comma@${ip} <<'EOF'
+ssh -tt -o StrictHostKeyChecking=no -i ${key_file} -p 8022 comma@${ip} <<'EOF'
 
 export CI=1
 export TEST_DIR=${env.TEST_DIR}
@@ -114,7 +112,6 @@ pipeline {
             stage('parallel tests') {
               parallel {
 
-                /*
                 stage('Devel Build') {
                   environment {
                     CI_PUSH = "${env.BRANCH_NAME == 'master' ? 'master-ci' : ' '}"
@@ -154,7 +151,6 @@ pipeline {
                     ])
                   }
                 }
-                */
 
                 stage('Tici Build') {
                   steps {
