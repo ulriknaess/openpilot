@@ -3,8 +3,8 @@ def phone(String ip, String step_label, String cmd) {
 
   withCredentials([file(credentialsId: 'id_rsa_public', variable: 'key_file')]) {
     sh label: step_label,
-        script: """
-                ssh -tt -o StrictHostKeyChecking=no -i ${key_file} -p 8022 root@${ip} '${ci_env} /usr/bin/bash -le' <<'EOF'
+       script: """
+               ssh -tt -o StrictHostKeyChecking=no -i ${key_file} -p 8022 root@${ip} '${ci_env} /usr/bin/bash -le' <<'EOF'
 echo \$\$ > /dev/cpuset/app/tasks || true
 echo \$PPID > /dev/cpuset/app/tasks || true
 mkdir -p /dev/shm
@@ -19,7 +19,6 @@ EOF"""
 def phone_steps(String device_type, steps) {
   lock(resource: "", label: device_type, inversePrecedence: true, variable: 'device_ip', quantity: 1) {
     timeout(time: 60, unit: 'MINUTES') {
-      phone(device_ip, "kill old processes", "pkill -f comma || true")
       phone(device_ip, "git checkout", readFile("selfdrive/test/setup_device_ci.sh"),)
       steps.each { item ->
         phone(device_ip, item[0], item[1])
@@ -40,7 +39,7 @@ pipeline {
 
   stages {
 
-    stage('Release Build') {
+    stage('Build release2') {
       agent {
         docker {
           image 'python:3.7.3'
@@ -105,6 +104,7 @@ pipeline {
             stage('parallel tests') {
               parallel {
 
+                /*
                 stage('Devel Build') {
                   environment {
                     CI_PUSH = "${env.BRANCH_NAME == 'master' ? 'master-ci' : ' '}"
@@ -141,6 +141,15 @@ pipeline {
                       ["test encoder", "CI=1 python selfdrive/loggerd/tests/test_encoder.py"],
                       //["test camerad", "CI=1 SEND_REAR=1 SEND_FRONT=1 python selfdrive/camerad/test/test_camerad.py"], // wait for shelf refactor
                       //["test updater", "python installer/updater/test_updater.py"],
+                    ])
+                  }
+                }
+                */
+
+                stage('Tici Build') {
+                  steps {
+                    phone_steps("tici", [
+                      ["build", "SCONS_CACHE=1 scons -j16"],
                     ])
                   }
                 }
