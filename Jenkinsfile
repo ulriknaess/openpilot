@@ -18,11 +18,11 @@ fi
 
 echo \$-
 whoami
-echo printenv
+printenv
 set -e
 echo \$-
 whoami
-echo printenv
+printenv
 
 
 cd ${env.TEST_DIR} || true
